@@ -15,6 +15,9 @@ public class MainActivity extends AppCompatActivity {
     private TextView dayText;
     private TextView timeText1;
     private TextView timeText2;
+    private TextView timeText3;
+    private TextView timeText4;
+    private TextView timeText5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,5 +29,8 @@ public class MainActivity extends AppCompatActivity {
         dayText = findViewById(R.id.dayText);
         timeText1 = findViewById(R.id.timeText1);
         timeText2 = findViewById(R.id.timeText2);
+        timeText3 = findViewById(R.id.timeText3);
+        timeText4 = findViewById(R.id.timeText4);
+        timeText5 = findViewById(R.id.timeText5);
     }
 }
