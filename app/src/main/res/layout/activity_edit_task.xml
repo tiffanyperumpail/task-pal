@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/taskpal_wallpaper"
-    tools:context=".NewTaskActivity">
+    tools:context=".EditTaskActivity">
 
     <TextView
         android:id="@+id/textView2"
@@ -16,7 +16,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="New Task"
+        android:text="Edit Task"
         android:textColor="#009C7D"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -24,7 +24,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/cancelButton"
+        android:id="@+id/cancelButtonEdit"
         android:layout_width="98dp"
         android:layout_height="48dp"
         android:layout_marginBottom="8dp"
@@ -37,10 +37,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dateButton" />
+        app:layout_constraintTop_toBottomOf="@+id/dateButtonEdit" />
 
     <Button
-        android:id="@+id/createButton"
+        android:id="@+id/editButton"
         android:layout_width="82dp"
         android:layout_height="48dp"
         android:layout_marginEnd="8dp"
@@ -48,7 +48,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Create!"
+        android:text="Edit!"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView2"
         app:layout_constraintTop_toTopOf="parent" />
@@ -123,10 +123,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/locationText" />
+        app:layout_constraintTop_toBottomOf="@+id/locationTextEdit" />
 
     <EditText
-        android:id="@+id/locationText"
+        android:id="@+id/locationTextEdit"
         android:layout_width="368dp"
         android:layout_height="43dp"
         android:layout_marginEnd="8dp"
@@ -141,10 +141,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleText" />
+        app:layout_constraintTop_toBottomOf="@+id/titleTextEdit" />
 
     <EditText
-        android:id="@+id/titleText"
+        android:id="@+id/titleTextEdit"
         android:layout_width="368dp"
         android:layout_height="43dp"
         android:layout_marginEnd="8dp"
@@ -162,7 +162,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <Button
-        android:id="@+id/timeButton"
+        android:id="@+id/timeButtonEdit"
         android:layout_width="98dp"
         android:layout_height="43dp"
         android:layout_marginEnd="8dp"
@@ -177,7 +177,7 @@
         app:layout_constraintTop_toTopOf="@+id/text3" />
 
     <Button
-        android:id="@+id/difficultyButton"
+        android:id="@+id/difficultyButtonEdit"
         android:layout_width="98dp"
         android:layout_height="43dp"
         android:layout_marginEnd="8dp"
@@ -192,7 +192,7 @@
         app:layout_constraintTop_toTopOf="@+id/text4" />
 
     <Button
-        android:id="@+id/dateButton"
+        android:id="@+id/dateButtonEdit"
         android:layout_width="234dp"
         android:layout_height="43dp"
         android:layout_marginEnd="8dp"
@@ -207,7 +207,7 @@
         app:layout_constraintTop_toTopOf="@+id/text1" />
 
     <Button
-        android:id="@+id/alertButton"
+        android:id="@+id/alertButtonEdit"
         android:layout_width="98dp"
         android:layout_height="43dp"
         android:layout_marginEnd="8dp"
