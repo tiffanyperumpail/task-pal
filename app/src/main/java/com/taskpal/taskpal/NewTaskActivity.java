@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 public class NewTaskActivity extends AppCompatActivity {
 
@@ -14,7 +15,7 @@ public class NewTaskActivity extends AppCompatActivity {
     private Button alertButton;
     private Button dateButton;
     private Button createButton;
-    private Button cancelButton;
+    private ImageButton exitButton;
     private EditText titleText;
     private EditText locationText;
 
@@ -27,7 +28,7 @@ public class NewTaskActivity extends AppCompatActivity {
         alertButton = findViewById(R.id.alertButton);
         dateButton = findViewById(R.id.dateButton);
         createButton = findViewById(R.id.createButton);
-        cancelButton = findViewById(R.id.cancelButton);
+        exitButton = findViewById(R.id.exitButton);
         titleText = findViewById(R.id.titleText);
         locationText = findViewById(R.id.locationText);
 
@@ -38,7 +39,7 @@ public class NewTaskActivity extends AppCompatActivity {
             }
         });
 
-        cancelButton.setOnClickListener(new View.OnClickListener() {
+        exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //wherever it came from

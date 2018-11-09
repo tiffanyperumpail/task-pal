@@ -128,7 +128,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:background="@color/white"
+        android:background="null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -143,39 +143,64 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Time1             Event1"
-                android:textSize="30sp"
+                android:textColor="#ffffff"
+                android:textSize="25sp"
                 tools:layout_editor_absoluteX="42dp"
                 tools:layout_editor_absoluteY="407dp" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dip"
+                android:background="@color/colorHint"></View>
 
             <TextView
                 android:id="@+id/timeText2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Time2             Event2"
-                android:textSize="30sp"
+                android:textColor="#ffffff"
+                android:textSize="25sp"
                 tools:layout_editor_absoluteX="42dp"
                 tools:layout_editor_absoluteY="407dp" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dip"
+                android:background="@color/colorHint"></View>
 
             <TextView
                 android:id="@+id/timeText3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Time3             Event3"
-                android:textSize="30sp" />
+                android:textColor="#ffffff"
+                android:textSize="25sp" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dip"
+                android:background="@color/colorHint"></View>
 
             <TextView
                 android:id="@+id/timeText4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Time4             Event4"
-                android:textSize="30sp" />
+                android:textColor="#ffffff"
+                android:textSize="25sp" />
+
+            <View
+                android:layout_width="fill_parent"
+                android:layout_height="2dip"
+                android:background="@color/colorHint"></View>
 
             <TextView
                 android:id="@+id/timeText5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Time5             Event5"
-                android:textSize="30sp" />
+                android:textColor="#ffffff"
+                android:textSize="25sp" />
         </LinearLayout>
     </ScrollView>
 

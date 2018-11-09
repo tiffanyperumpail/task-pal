@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 
 public class PreferencesActivity extends AppCompatActivity {
 
     private EditText nameText;
     private Button saveButton;
+    private ImageButton exitButton;
     private RadioButton morningButton;
     private RadioButton dayButton;
     private RadioButton nightButton;
@@ -26,6 +28,7 @@ public class PreferencesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_preferences);
         nameText = findViewById(R.id.nameTextPreferences);
         saveButton = findViewById(R.id.saveButton);
+        exitButton = findViewById(R.id.exitButtonPreferences);
         morningButton = findViewById(R.id.morningButton);
         dayButton = findViewById(R.id.dayButton);
         nightButton = findViewById(R.id.nightButton);
@@ -35,6 +38,13 @@ public class PreferencesActivity extends AppCompatActivity {
         beforeButton = findViewById(R.id.beforeButton);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(PreferencesActivity.this, MainActivity.class));
+            }
+        });
+
+        exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(PreferencesActivity.this, MainActivity.class));
