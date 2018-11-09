@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Task Pal</string>
     <string name="title_activity_preferences">PreferencesActivity</string>
+    <string name="title_activity_calendar">CalendarActivity</string>
 </resources>

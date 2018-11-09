@@ -1,7 +1,9 @@
 package com.taskpal.taskpal;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -31,6 +33,13 @@ public class PreferencesActivity extends AppCompatActivity {
         breaksButton = findViewById(R.id.breaksButton);
         closerButton = findViewById(R.id.closerButton);
         beforeButton = findViewById(R.id.beforeButton);
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(PreferencesActivity.this, MainActivity.class));
+            }
+        });
 
     }
 }

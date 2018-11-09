@@ -1,7 +1,9 @@
 package com.taskpal.taskpal;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -28,5 +30,19 @@ public class NewTaskActivity extends AppCompatActivity {
         cancelButton = findViewById(R.id.cancelButton);
         titleText = findViewById(R.id.titleText);
         locationText = findViewById(R.id.locationText);
+
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //startActivity(new Intent(NewTaskActivity.this, CalendarActivity.class));
+            }
+        });
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //wherever it came from
+            }
+        });
     }
 }
