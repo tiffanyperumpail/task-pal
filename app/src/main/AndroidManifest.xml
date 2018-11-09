@@ -20,7 +20,11 @@
         <activity android:name=".NewTaskActivity" />
         <activity android:name=".EditTaskActivity" />
         <activity android:name=".PreferencesActivity" />
-        <activity android:name=".CalendarActivity"></activity>
+        <activity android:name=".CalendarActivity" />
+        <activity
+            android:name=".MenuActivity"
+            android:label="@string/title_activity_menu"
+            android:theme="@style/AppTheme2"></activity>
     </application>
 
 </manifest>
