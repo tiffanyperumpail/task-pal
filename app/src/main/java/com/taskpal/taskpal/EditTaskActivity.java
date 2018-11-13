@@ -45,5 +45,33 @@ public class EditTaskActivity extends AppCompatActivity {
                 startActivity(new Intent(EditTaskActivity.this, CalendarActivity.class));
             }
         });
+
+        timeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(EditTaskActivity.this, completionTimeActivity.class));
+            }
+        });
+
+        difficultyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(EditTaskActivity.this, difficultyActivity.class));
+            }
+        });
+
+        alertButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(EditTaskActivity.this, alertActivity.class));
+            }
+        });
+
+        dateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(EditTaskActivity.this, dateActivity.class));
+            }
+        });
     }
 }

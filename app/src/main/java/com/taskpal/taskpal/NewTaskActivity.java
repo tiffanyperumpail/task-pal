@@ -35,7 +35,7 @@ public class NewTaskActivity extends AppCompatActivity {
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(new Intent(NewTaskActivity.this, CalendarActivity.class));
+                startActivity(new Intent(NewTaskActivity.this, CalendarActivity.class));
             }
         });
 
@@ -43,6 +43,34 @@ public class NewTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //wherever it came from
+            }
+        });
+
+        timeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(NewTaskActivity.this, completionTimeActivity.class));
+            }
+        });
+
+        difficultyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(NewTaskActivity.this, difficultyActivity.class));
+            }
+        });
+
+        alertButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(NewTaskActivity.this, alertActivity.class));
+            }
+        });
+
+        dateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(NewTaskActivity.this, dateActivity.class));
             }
         });
     }
