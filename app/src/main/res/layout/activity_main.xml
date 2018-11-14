@@ -9,8 +9,8 @@
 
     <ImageButton
         android:id="@+id/sunButton"
-        android:layout_width="140dp"
-        android:layout_height="144dp"
+        android:layout_width="138dp"
+        android:layout_height="140dp"
         android:background="@null"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
