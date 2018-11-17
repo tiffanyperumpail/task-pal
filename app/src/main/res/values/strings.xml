@@ -42,4 +42,8 @@
     <string name="two_hour_alert">two hours before</string>
     <string name="day_alert">one day before</string>
     <string name="create_event">Create!</string>
+    <string name="enter_due_date">Enter Due Date:</string>
+    <string name="done_button_text">Done!</string>
+    <string name="time_button_text">Time</string>
+    <string name="date_button_text">Date</string>
 </resources>

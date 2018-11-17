@@ -39,7 +39,7 @@ public class NewTaskActivity extends AppCompatActivity {
         exitButton = findViewById(R.id.exitButton);
         titleText = findViewById(R.id.titleText);
         locationText = findViewById(R.id.locationText);
-        event = new String[9];
+        event = new String[10];
 
         createButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,14 +47,14 @@ public class NewTaskActivity extends AppCompatActivity {
                 event[0] = titleText.getText().toString();
                 event[1] = locationText.getText().toString();
 
-                for (int i = 0; i < 9; i++) {
+                for (int i = 0; i < 10; i++) {
                     if (event[i] == null || event[i].equals("")) {
                         Toast.makeText(getApplicationContext(), getString(R.string.new_task_error), Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }
 
-                // 0-name, 1-location, 2-completion time (minutes), 3-priority (1 to 5), 4-alert (minutes), 5-due day, 6-due month, 7-due year, 8-due time (24 hour)
+                // 0-name, 1-location, 2-completion time (minutes), 3-priority (1 to 5), 4-alert (minutes), 5-due day, 6-due month, 7-due year, 8-due hour (24), 9-due min
                 startActivity(new Intent(NewTaskActivity.this, CalendarActivity.class));
             }
         });
@@ -157,11 +157,12 @@ public class NewTaskActivity extends AppCompatActivity {
             }
         } else if (requestCode == DATE_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                String date = data.getStringExtra("data");
-                event[5] = date.substring(0,2);
-                event[6] = date.substring(2, 4);
-                event[7] = date.substring(4, 8);
-                event[8] = date.substring(8);
+                event[5] = data.getStringExtra("day");
+                event[6] = data.getStringExtra("month");
+                event[7] = data.getStringExtra("year");
+                event[8] = data.getStringExtra("hour");
+                event[9] = data.getStringExtra("min");
+                dateButton.setText(event[5] + "/" + event[6] + "/" + event[7].substring(2) + " " + event[8] + ":" + event[9]);
             }
         }
     }
