@@ -46,4 +46,5 @@
     <string name="done_button_text">Done!</string>
     <string name="time_button_text">Time</string>
     <string name="date_button_text">Date</string>
+    <string name="invalid_date">This date and time are too close to schedule.</string>
 </resources>

@@ -99,6 +99,12 @@ public class EditTaskActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(EditTaskActivity.this, dateActivity.class);
+                intent.putExtra("completion", event[2]);
+                intent.putExtra("day", event[5]);
+                intent.putExtra("month", event[6]);
+                intent.putExtra("year", event[7]);
+                intent.putExtra("hour", event[8]);
+                intent.putExtra("min", event[9]);
                 startActivityForResult(intent, DATE_REQUEST_CODE);
             }
         });
