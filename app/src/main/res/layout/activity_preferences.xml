@@ -105,39 +105,46 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/nameTextPreferences" />
 
-            <RadioButton
-                android:id="@+id/morningButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:buttonTint="@color/white"
-                android:text="in the morning"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                app:layout_constraintTop_toBottomOf="@+id/textView3"
-                tools:layout_editor_absoluteX="0dp" />
+            <RadioGroup
+            	android:id="@+id/timeOfDayGroup"
+            	android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
 
-            <RadioButton
-                android:id="@+id/dayButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:buttonTint="@color/white"
-                android:text="during the day"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                app:layout_constraintTop_toBottomOf="@+id/morningButton"
-                tools:layout_editor_absoluteX="0dp" />
+	            <RadioButton
+	                android:id="@+id/morningButton"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_marginTop="8dp"
+	                android:buttonTint="@color/white"
+	                android:text="in the morning"
+	                android:textColor="@color/white"
+	                android:textSize="20sp"
+	                app:layout_constraintTop_toBottomOf="@+id/textView3"
+	                tools:layout_editor_absoluteX="0dp" />
 
-            <RadioButton
-                android:id="@+id/nightButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:buttonTint="@color/white"
-                android:text="at night"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                app:layout_constraintTop_toBottomOf="@+id/dayButton"
-                tools:layout_editor_absoluteX="0dp" />
+	            <RadioButton
+	                android:id="@+id/dayButton"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:buttonTint="@color/white"
+	                android:text="during the day"
+	                android:textColor="@color/white"
+	                android:textSize="20sp"
+	                app:layout_constraintTop_toBottomOf="@+id/morningButton"
+	                tools:layout_editor_absoluteX="0dp" />
+
+	            <RadioButton
+	                android:id="@+id/nightButton"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:buttonTint="@color/white"
+	                android:text="at night"
+	                android:textColor="@color/white"
+	                android:textSize="20sp"
+	                app:layout_constraintTop_toBottomOf="@+id/dayButton"
+	                tools:layout_editor_absoluteX="0dp" />
+
+	        </RadioGroup>
 
             <TextView
                 android:id="@+id/textView34"
@@ -156,28 +163,35 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/nightButton" />
 
-            <RadioButton
-                android:id="@+id/all_at_onceButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:buttonTint="@color/white"
-                android:text="I like to work all at once"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                app:layout_constraintTop_toBottomOf="@+id/textView34"
-                tools:layout_editor_absoluteX="0dp" />
+            <RadioGroup
+            	android:id="@+id/attentionSpanGroup"
+            	android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
 
-            <RadioButton
-                android:id="@+id/breaksButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:buttonTint="@color/white"
-                android:text="I like to take breaks"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                app:layout_constraintTop_toBottomOf="@+id/all_at_onceButton"
-                tools:layout_editor_absoluteX="0dp" />
+	            <RadioButton
+	                android:id="@+id/all_at_onceButton"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_marginTop="8dp"
+	                android:buttonTint="@color/white"
+	                android:text="I like to work all at once"
+	                android:textColor="@color/white"
+	                android:textSize="20sp"
+	                app:layout_constraintTop_toBottomOf="@+id/textView34"
+	                tools:layout_editor_absoluteX="0dp" />
+
+	            <RadioButton
+	                android:id="@+id/breaksButton"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:buttonTint="@color/white"
+	                android:text="I like to take breaks"
+	                android:textColor="@color/white"
+	                android:textSize="20sp"
+	                app:layout_constraintTop_toBottomOf="@+id/all_at_onceButton"
+	                tools:layout_editor_absoluteX="0dp" />
+
+	        </RadioGroup>
 
             <TextView
                 android:id="@+id/textView35"
@@ -196,28 +210,35 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/breaksButton" />
 
-            <RadioButton
-                android:id="@+id/closerButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:buttonTint="@color/white"
-                android:text="closer to the deadline"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                app:layout_constraintTop_toBottomOf="@+id/textView35"
-                tools:layout_editor_absoluteX="0dp" />
+			<RadioGroup
+            	android:id="@+id/procrastinationGroup"
+            	android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
 
-            <RadioButton
-                android:id="@+id/beforeButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:buttonTint="@color/white"
-                android:text="long before the deadline"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                app:layout_constraintTop_toBottomOf="@+id/closerButton"
-                tools:layout_editor_absoluteX="0dp" />
+	            <RadioButton
+	                android:id="@+id/closerButton"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:layout_marginTop="8dp"
+	                android:buttonTint="@color/white"
+	                android:text="closer to the deadline"
+	                android:textColor="@color/white"
+	                android:textSize="20sp"
+	                app:layout_constraintTop_toBottomOf="@+id/textView35"
+	                tools:layout_editor_absoluteX="0dp" />
+
+	            <RadioButton
+	                android:id="@+id/beforeButton"
+	                android:layout_width="match_parent"
+	                android:layout_height="wrap_content"
+	                android:buttonTint="@color/white"
+	                android:text="long before the deadline"
+	                android:textColor="@color/white"
+	                android:textSize="20sp"
+	                app:layout_constraintTop_toBottomOf="@+id/closerButton"
+	                tools:layout_editor_absoluteX="0dp" />
+
+	        </RadioGroup>
 
         </LinearLayout>
     </ScrollView>
