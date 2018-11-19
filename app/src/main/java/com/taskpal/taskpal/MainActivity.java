@@ -14,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Button addTaskButton;
     private ImageButton sunButton;
+    private Button menuButton;
     private TextView nameText;
     private TextView monthText2;
     private TextView dayText;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         addTaskButton = findViewById(R.id.addTaskButton);
         sunButton = findViewById(R.id.sunButton);
+        menuButton = findViewById(R.id.menuButton);
         nameText = findViewById(R.id.nameText);
         monthText2 = findViewById(R.id.monthText2);
         dayText = findViewById(R.id.dayText);
@@ -49,6 +51,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, CalendarActivity.class));
+            }
+        });
+
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, MenuActivity.class));
             }
         });
     }
