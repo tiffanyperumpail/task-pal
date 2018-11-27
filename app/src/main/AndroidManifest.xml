@@ -2,12 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.taskpal.taskpal">
+
     <uses-sdk android:minSdkVersion="14" />
+
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -36,10 +41,18 @@
         <activity android:name=".completionTimeActivity" />
         <activity android:name=".difficultyActivity" />
         <activity android:name=".alertActivity" />
-        <activity android:name=".dateActivity"></activity>
+        <activity android:name=".dateActivity" />
+
         <meta-data
             android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
+            android:value="@integer/google_play_services_version" />
+
+        <activity android:name=".IntroActivity" />
+        <activity android:name=".Intro2Activity" />
+        <activity android:name=".Intro3Activity" />
+        <activity android:name=".Intro4Activity" />
+        <activity android:name=".Intro5Activity" />
+        <activity android:name=".Intro6Activity"></activity>
     </application>
 
 </manifest>
