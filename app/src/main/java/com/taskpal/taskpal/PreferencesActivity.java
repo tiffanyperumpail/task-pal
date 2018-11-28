@@ -37,7 +37,7 @@ public class PreferencesActivity extends AppCompatActivity {
     private RadioButton closerButton;
     private RadioButton beforeButton;
 
-    public static String NAMETEXT;
+    public static String NAMETEXT = null;
 
     SharedPreferences sharedpreferences;
     Editor sharedPreferenceEditor;
@@ -62,13 +62,16 @@ public class PreferencesActivity extends AppCompatActivity {
         closerButton = findViewById(R.id.closerButton);
         beforeButton = findViewById(R.id.beforeButton);
 
+        if (NAMETEXT != null) {
+            nameText.setText(NAMETEXT);
+        }
+
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NAMETEXT = nameText.getText().toString();
-                nameText.setText(nameText.getText().toString());
                 startActivity(new Intent(PreferencesActivity.this, MainActivity.class));
 //                Editor editor = sharedpreferences.edit();
 //                editor.putString("name", nameText.toString());
