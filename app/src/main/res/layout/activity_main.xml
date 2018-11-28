@@ -1,228 +1,247 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Use DrawerLayout as root container for activity -->
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/homescreen_background"
-    tools:context=".MainActivity">
+    android:fitsSystemWindows="true">
 
-    <ImageButton
-        android:id="@+id/sunButton"
-        android:layout_width="138dp"
-        android:layout_height="140dp"
-        android:background="@null"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/sun" />
+    <android.support.constraint.ConstraintLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/homescreen_background"
+        tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="144dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Good Morning, "
-        android:textColor="#009C7D"
-        android:textSize="30sp"
-        app:fontFamily="sans-serif"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageButton
+            android:id="@+id/sunButton"
+            android:layout_width="138dp"
+            android:layout_height="140dp"
+            android:background="@null"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/sun" />
 
-    <TextView
-        android:id="@+id/nameText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:text="Cameron"
-        android:textColor="#009C7D"
-        android:textSize="30sp"
-        app:fontFamily="sans-serif"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-    <TextView
-        android:id="@+id/dayText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="17"
-        android:textColor="#009C7D"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toBottomOf="@+id/sunButton"
-        app:layout_constraintEnd_toEndOf="@+id/sunButton"
-        app:layout_constraintHorizontal_bias="0.191"
-        app:layout_constraintStart_toStartOf="@+id/sunButton"
-        app:layout_constraintTop_toBottomOf="@+id/monthText2"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/monthText2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="July"
-        android:textColor="#009C7D"
-        android:textSize="25sp"
-        app:layout_constraintBottom_toBottomOf="@+id/sunButton"
-        app:layout_constraintEnd_toEndOf="@+id/sunButton"
-        app:layout_constraintHorizontal_bias="0.23"
-        app:layout_constraintStart_toStartOf="@+id/sunButton"
-        app:layout_constraintTop_toTopOf="@+id/sunButton"
-        app:layout_constraintVertical_bias="0.244" />
-
-    <Button
-        android:id="@+id/addTaskButton"
-        android:layout_width="149dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="92dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="Add Task"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameText" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginBottom="8dp"
-        android:text="Up Next:"
-        android:textColor="#ffffff"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addTaskButton" />
-
-    <ScrollView
-        android:id="@+id/scrollView2"
-        android:layout_width="350dp"
-        android:layout_height="164dp"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:background="@null"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="144dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="Good Morning, "
+            android:textColor="#009C7D"
+            android:textSize="30sp"
+            app:fontFamily="sans-serif"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/timeText1"
+        <TextView
+            android:id="@+id/nameText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="Cameron"
+            android:textColor="#009C7D"
+            android:textSize="30sp"
+            app:fontFamily="sans-serif"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <TextView
+            android:id="@+id/dayText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="17"
+            android:textColor="#009C7D"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toBottomOf="@+id/sunButton"
+            app:layout_constraintEnd_toEndOf="@+id/sunButton"
+            app:layout_constraintHorizontal_bias="0.191"
+            app:layout_constraintStart_toStartOf="@+id/sunButton"
+            app:layout_constraintTop_toBottomOf="@+id/monthText2"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/monthText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="July"
+            android:textColor="#009C7D"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toBottomOf="@+id/sunButton"
+            app:layout_constraintEnd_toEndOf="@+id/sunButton"
+            app:layout_constraintHorizontal_bias="0.23"
+            app:layout_constraintStart_toStartOf="@+id/sunButton"
+            app:layout_constraintTop_toTopOf="@+id/sunButton"
+            app:layout_constraintVertical_bias="0.244" />
+
+        <Button
+            android:id="@+id/addTaskButton"
+            android:layout_width="149dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="92dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="Add Task"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.502"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nameText" />
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="Up Next:"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addTaskButton" />
+
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="350dp"
+            android:layout_height="164dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@null"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="12:30             Presentation"
-                android:textColor="#ffffff"
-                android:textSize="25sp"
-                tools:layout_editor_absoluteX="42dp"
-                tools:layout_editor_absoluteY="407dp" />
+                android:orientation="vertical" >
 
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="2dip"
-                android:background="@color/colorHint"></View>
+                <TextView
+                    android:id="@+id/timeText1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="12:30             Presentation"
+                    android:textColor="#ffffff"
+                    android:textSize="25sp"
+                    tools:layout_editor_absoluteX="42dp"
+                    tools:layout_editor_absoluteY="407dp" />
 
-            <TextView
-                android:id="@+id/timeText2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="02:00             Homework"
-                android:textColor="#ffffff"
-                android:textSize="25sp"
-                tools:layout_editor_absoluteX="42dp"
-                tools:layout_editor_absoluteY="407dp" />
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="2dip"
+                    android:background="@color/colorHint"></View>
 
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="2dip"
-                android:background="@color/colorHint"></View>
+                <TextView
+                    android:id="@+id/timeText2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="02:00             Homework"
+                    android:textColor="#ffffff"
+                    android:textSize="25sp"
+                    tools:layout_editor_absoluteX="42dp"
+                    tools:layout_editor_absoluteY="407dp" />
 
-            <TextView
-                android:id="@+id/timeText3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="08:45             Class"
-                android:textColor="#ffffff"
-                android:textSize="25sp" />
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="2dip"
+                    android:background="@color/colorHint"></View>
 
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="2dip"
-                android:background="@color/colorHint"></View>
+                <TextView
+                    android:id="@+id/timeText3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="08:45             Class"
+                    android:textColor="#ffffff"
+                    android:textSize="25sp" />
 
-            <TextView
-                android:id="@+id/timeText4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="09:30             Gym"
-                android:textColor="#ffffff"
-                android:textSize="25sp" />
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="2dip"
+                    android:background="@color/colorHint"></View>
 
-            <View
-                android:layout_width="fill_parent"
-                android:layout_height="2dip"
-                android:background="@color/colorHint"></View>
+                <TextView
+                    android:id="@+id/timeText4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="09:30             Gym"
+                    android:textColor="#ffffff"
+                    android:textSize="25sp" />
 
-            <TextView
-                android:id="@+id/timeText5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="12:30             Read"
-                android:textColor="#ffffff"
-                android:textSize="25sp" />
-        </LinearLayout>
-    </ScrollView>
+                <View
+                    android:layout_width="fill_parent"
+                    android:layout_height="2dip"
+                    android:background="@color/colorHint"></View>
 
-    <Button
-        android:id="@+id/menuButton"
+                <TextView
+                    android:id="@+id/timeText5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="12:30             Read"
+                    android:textColor="#ffffff"
+                    android:textSize="25sp" />
+            </LinearLayout>
+        </ScrollView>
+
+        <Button
+            android:id="@+id/menuButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/white"
+            android:text="Menu"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/white"
-        android:text="Menu"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:fitsSystemWindows="true"
+        app:menu = "@menu/activity_menu_drawer"
+        app:headerLayout="@layout/nav_header_menu"/>
 
-</android.support.constraint.ConstraintLayout>
+</android.support.v4.widget.DrawerLayout>

@@ -55,7 +55,7 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        calendar.setOnClickListener(new View.OnClickListener() {
+        home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MenuActivity.this, MainActivity.class));
