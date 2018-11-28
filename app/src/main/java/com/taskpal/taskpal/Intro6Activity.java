@@ -14,7 +14,7 @@ public class Intro6Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro6);
-        next = findViewById(R.id.next1);
+        next = findViewById(R.id.next6);
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override

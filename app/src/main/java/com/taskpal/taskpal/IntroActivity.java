@@ -15,6 +15,7 @@ public class IntroActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
+        checkFirstOpen();
         next = findViewById(R.id.next1);
 
         next.setOnClickListener(new View.OnClickListener() {
@@ -23,5 +24,20 @@ public class IntroActivity extends AppCompatActivity {
                 startActivity(new Intent(IntroActivity.this, Intro2Activity.class));
             }
         });
+    }
+
+    private void checkFirstOpen() {
+        Boolean isFirstRun = getSharedPreferences("PREFERENCE", MODE_PRIVATE)
+                .getBoolean("isFirstRun", true);
+
+        if (!isFirstRun) {
+            Intent intent = new Intent(IntroActivity.this, StartupActivity.class);
+            startActivity(intent);
+            finish();
+
+        }
+
+        getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("isFirstRun",
+                false).apply();
     }
 }

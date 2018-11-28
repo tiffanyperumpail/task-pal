@@ -12,12 +12,13 @@ import android.widget.RadioGroup;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.widget.TextView;
 
 public class PreferencesActivity extends AppCompatActivity {
 
     public static final String MyPREFERENCES = "MyPrefs" ;
 
-    private EditText nameText;
+    public EditText nameText;
     private Button saveButton;
     private ImageButton exitButton;
 
