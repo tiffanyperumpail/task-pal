@@ -18,7 +18,7 @@ public class PreferencesActivity extends AppCompatActivity {
 
     public static final String MyPREFERENCES = "MyPrefs" ;
 
-    public EditText nameText;
+    private EditText nameText;
     private Button saveButton;
     private ImageButton exitButton;
 
@@ -36,6 +36,8 @@ public class PreferencesActivity extends AppCompatActivity {
     private RadioButton breaksButton;
     private RadioButton closerButton;
     private RadioButton beforeButton;
+
+    public static String NAMETEXT;
 
     SharedPreferences sharedpreferences;
     Editor sharedPreferenceEditor;
@@ -65,16 +67,18 @@ public class PreferencesActivity extends AppCompatActivity {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                NAMETEXT = nameText.getText().toString();
+                nameText.setText(nameText.getText().toString());
                 startActivity(new Intent(PreferencesActivity.this, MainActivity.class));
-                Editor editor = sharedpreferences.edit();
-                editor.putString("name", nameText.toString());
-                timeOfDayButton = (RadioButton) findViewById(timeOfDayGroup.getCheckedRadioButtonId());
-                editor.putString("timeOfDay", timeOfDayButton.getText().toString());
-                attentionSpanButton = (RadioButton) findViewById(attentionSpanGroup.getCheckedRadioButtonId());
-                editor.putString("attentionSpan", attentionSpanButton.getText().toString());
-                procrastinationButton = (RadioButton) findViewById(procrastinationGroup.getCheckedRadioButtonId());
-                editor.putString("procrastinationSpan", procrastinationButton.getText().toString());
-                editor.commit();
+//                Editor editor = sharedpreferences.edit();
+//                editor.putString("name", nameText.toString());
+//                timeOfDayButton = (RadioButton) findViewById(timeOfDayGroup.getCheckedRadioButtonId());
+//                editor.putString("timeOfDay", timeOfDayButton.getText().toString());
+//                attentionSpanButton = (RadioButton) findViewById(attentionSpanGroup.getCheckedRadioButtonId());
+//                editor.putString("attentionSpan", attentionSpanButton.getText().toString());
+//                procrastinationButton = (RadioButton) findViewById(procrastinationGroup.getCheckedRadioButtonId());
+//                editor.putString("procrastinationSpan", procrastinationButton.getText().toString());
+//                editor.commit();
             }
         });
 

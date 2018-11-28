@@ -20,6 +20,10 @@ import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
 
     private Button addTaskButton;
@@ -52,6 +56,17 @@ public class MainActivity extends AppCompatActivity {
         timeText4 = findViewById(R.id.timeText4);
         timeText5 = findViewById(R.id.timeText5);
         drawerLayout = findViewById(R.id.drawer_layout);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM");
+        Date date = new Date();
+        String dateTime = dateFormat.format(date);
+        monthText2.setText(dateTime);
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd");
+        Date date2 = new Date();
+        String dateTime2 = dateFormat2.format(date2);
+        dayText.setText(dateTime2);
+
+        nameText.setText(PreferencesActivity.NAMETEXT);
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
