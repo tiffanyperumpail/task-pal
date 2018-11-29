@@ -74,6 +74,7 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
 
     private com.google.api.services.calendar.Calendar service = null;
     GoogleAccountCredential mCredential;
+    private List<Event> scheduledEventsList = new ArrayList<>();
 
     static final int REQUEST_ACCOUNT_PICKER = 1000;
     static final int REQUEST_AUTHORIZATION = 1001;
@@ -109,11 +110,12 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
         cal.set(Integer.parseInt(task[7]), Integer.parseInt(task[6]), Integer.parseInt(task[5]),
                 Integer.parseInt(task[8]), Integer.parseInt(task[9]));
         cal.add(Calendar.MONTH, -1);
-        Log.d("input", cal.toString());
         DateTime dueDate = new DateTime(cal.getTime());
-        Log.d("input", dueDate.toString());
-        cal.set(Calendar.HOUR, Integer.parseInt(task[8]) - 2);
+        Log.d("insertEventHour", task[8]);
+        Log.d("insertEventEnd", dueDate.toString());
+        cal.add(Calendar.HOUR, -2);
         DateTime startDate = new DateTime(cal.getTime());
+        Log.d("insertEventStart", startDate.toString());
         //DateTime startTime = calculateStartTime(task[4], dueDate);
         Event new1 = new Event().setSummary(task[0])
                                 .setLocation(task[1]);
@@ -196,10 +198,6 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
                 mOutputText.setText("Request cancelled.");
             }
         }
-    }
-
-    private void getDataFromApi() throws IOException {
-        // List the next 10 events from the primary calendar.
     }
 
     private void getResultsFromApi() {
@@ -411,7 +409,9 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
                 .setLocation(location)
                 .setDescription(des);
         event.setStart(startDate);
+        Log.d("insertStart", startDate.toString());
         event.setEnd(endDate);
+        Log.d("insertEnd", endDate.toString());
         String[] recurrence = new String[]{"RRULE:FREQ=DAILY;COUNT=1"};
         event.setRecurrence(Arrays.asList(recurrence));
         event.setAttendees(eventAttendees);
@@ -476,6 +476,29 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
             } catch (UserRecoverableAuthIOException e) {
                 startActivityForResult(e.getIntent(), CalendarActivity.REQUEST_AUTHORIZATION);
             }
+        }
+    }
+
+    /**
+     * Fetch a list of the next 10 events from the primary calendar.
+     * @return List of Strings describing returned events.
+     * @throws IOException
+     */
+    private void getDataFromApi() throws IOException {
+        // List the next 10 events from the primary calendar.
+        DateTime now = new DateTime(System.currentTimeMillis());
+        List<String> eventStrings = new ArrayList<String>();
+        Events events = service.events().list("primary")
+                .setMaxResults(10)
+                .setTimeMin(now)
+                .setOrderBy("startTime")
+                .setSingleEvents(true)
+                .execute();
+        List<Event> items = events.getItems();
+        Event scheduledEvent;
+        scheduledEventsList.clear();
+        for (Event event : items) {
+            scheduledEventsList.add(event);
         }
     }
 
