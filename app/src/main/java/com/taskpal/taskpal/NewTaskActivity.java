@@ -1,7 +1,10 @@
 package com.taskpal.taskpal;
 
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.Intent;
+import android.net.Uri;
+import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -55,10 +58,17 @@ public class NewTaskActivity extends AppCompatActivity {
                     }
                 }
 
+                long startMillis2 = System.currentTimeMillis();
+                Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+                builder.appendPath("time");
+                ContentUris.appendId(builder, startMillis2);
+                Intent intent = new Intent(Intent.ACTION_VIEW)
+                        .setData(builder.build());
+                startActivity(intent);
                 // 0-name, 1-location, 2-completion time (minutes), 3-priority (1 to 5), 4-alert (minutes), 5-due day, 6-due month, 7-due year, 8-due hour (24), 9-due min
-                Intent i = new Intent(NewTaskActivity.this, CalendarActivity.class);
+                /*Intent i = new Intent(NewTaskActivity.this, CalendarActivity.class);
                 i.putExtra("curr", event);
-                startActivity(i);
+                startActivity(i);*/
             }
         });
 
