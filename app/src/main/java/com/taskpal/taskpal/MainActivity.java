@@ -1,11 +1,16 @@
 package com.taskpal.taskpal;
 
 import android.Manifest;
+import android.annotation.TargetApi;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +31,8 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
+    public NotificationCompat.Builder mBuilder;
+    public NotificationManager notificationManager;
     private Button addTaskButton;
     private ImageButton sunButton;
     private Button menuButton;
@@ -44,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         checkPermission();
+        notificationsSetup();
         addTaskButton = findViewById(R.id.addTaskButton);
         sunButton = findViewById(R.id.sunButton);
         menuButton = findViewById(R.id.menuButton);
@@ -97,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
         addTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                notificationManager.notify(1, mBuilder.build());
                 startActivity(new Intent(MainActivity.this, NewTaskActivity.class));
             }
         });
@@ -125,5 +134,32 @@ public class MainActivity extends AppCompatActivity {
                     new String[]{Manifest.permission.WRITE_CALENDAR, Manifest.permission.READ_CALENDAR},
                     123);
         }
+    }
+    @TargetApi(26)
+    public void notificationsSetup() {
+        // Set up notification channel
+        CharSequence name = "check-ins";
+        String description = "Check in with user after each task";
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        NotificationChannel channel = new NotificationChannel("check_ins_id", name, importance);
+        channel.setDescription(description);
+
+        // Register the channel with the system; you can't change the importance
+        // or other notification behaviors after this
+        notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
+        // Create an explicit intent for notification
+        Intent intent = new Intent(this, NotificationActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+        mBuilder = new NotificationCompat.Builder(this, "check_ins_id")
+                .setSmallIcon(R.drawable.app_logo)
+                .setContentTitle("Task Check-in")
+                .setContentText("Did you complete TASK_NAME_HERE?")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                // Set the intent that will fire when the user taps the notification
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
     }
 }
