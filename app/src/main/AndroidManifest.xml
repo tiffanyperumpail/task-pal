@@ -52,6 +52,8 @@
         <activity android:name=".Intro5Activity" />
         <activity android:name=".Intro6Activity" />
         <activity android:name=".NotificationActivity"></activity>
+        <!-- Register the Alarm Receiver -->
+        <receiver android:name=".AlarmReceiver"/>
     </application>
 
 </manifest>
