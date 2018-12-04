@@ -45,4 +45,31 @@ public class NotificationScheduler
         notificationManager.notify(DAILY_REMINDER_REQUEST_CODE, notification);
     }
 
+    public static void setReminder(Context context,Class<?> cls, int date, int hour, int min)
+    {
+        Calendar calendar = Calendar.getInstance();
+
+        Calendar setcalendar = Calendar.getInstance();
+        setcalendar.set(Calendar.DATE, date);
+        setcalendar.set(Calendar.HOUR_OF_DAY, hour);
+        setcalendar.set(Calendar.MINUTE, min);
+        setcalendar.set(Calendar.SECOND, 0);
+
+        if(setcalendar.before(calendar))
+            setcalendar.add(Calendar.DATE,1);
+
+        // Enable a receiver
+        ComponentName receiver = new ComponentName(context, cls);
+        PackageManager pm = context.getPackageManager();
+
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP);
+
+        Intent intent1 = new Intent(context, cls);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, DAILY_REMINDER_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        am.set(AlarmManager.RTC, setcalendar.getTimeInMillis(), pendingIntent);
+    }
+
 }
