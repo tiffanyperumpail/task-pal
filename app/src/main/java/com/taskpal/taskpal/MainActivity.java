@@ -95,6 +95,10 @@ public class MainActivity extends AppCompatActivity {
                             case R.id.nav_calendar:
                                 startActivity(new Intent(MainActivity.this, CalendarActivity.class));
                                 return true;
+                            case R.id.nav_tutorial:
+                                Intent intent = new Intent(MainActivity.this, IntroActivity.class);
+                                intent.putExtra("flag", "A");
+                                startActivity(intent);
                             default:
                                 return true;
                         }
