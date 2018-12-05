@@ -5,8 +5,11 @@ import android.annotation.TargetApi;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ContentUris;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -93,10 +96,16 @@ public class MainActivity extends AppCompatActivity {
                                 startActivity(new Intent(MainActivity.this, PreferencesActivity.class));
                                 return true;
                             case R.id.nav_calendar:
-                                startActivity(new Intent(MainActivity.this, CalendarActivity.class));
+                                long startMillis2 = System.currentTimeMillis();
+                                Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+                                builder.appendPath("time");
+                                ContentUris.appendId(builder, startMillis2);
+                                Intent intent = new Intent(Intent.ACTION_VIEW)
+                                        .setData(builder.build());
+                                startActivity(intent);
                                 return true;
                             case R.id.nav_tutorial:
-                                Intent intent = new Intent(MainActivity.this, IntroActivity.class);
+                                intent = new Intent(MainActivity.this, IntroActivity.class);
                                 intent.putExtra("flag", "A");
                                 startActivity(intent);
                             default:
@@ -117,7 +126,13 @@ public class MainActivity extends AppCompatActivity {
         sunButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, CalendarActivity.class));
+                long startMillis2 = System.currentTimeMillis();
+                Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+                builder.appendPath("time");
+                ContentUris.appendId(builder, startMillis2);
+                Intent intent = new Intent(Intent.ACTION_VIEW)
+                        .setData(builder.build());
+                startActivity(intent);
             }
         });
 
