@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         addTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                notificationManager.notify(1, mBuilder.build());
+                //notificationManager.notify(1, mBuilder.build());
                 startActivity(new Intent(MainActivity.this, NewTaskActivity.class));
             }
         });

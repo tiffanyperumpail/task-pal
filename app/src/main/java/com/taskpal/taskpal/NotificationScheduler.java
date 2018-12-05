@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import static android.content.Context.ALARM_SERVICE;
@@ -45,31 +46,31 @@ public class NotificationScheduler
         notificationManager.notify(DAILY_REMINDER_REQUEST_CODE, notification);
     }
 
-    public static void setReminder(Context context,Class<?> cls, int date, int hour, int min)
-    {
-        Calendar calendar = Calendar.getInstance();
+    public static void setReminder(Context context,Class<?> cls, String date) {
+        try {
+            Calendar calendar = Calendar.getInstance();
 
-        Calendar setcalendar = Calendar.getInstance();
-        setcalendar.set(Calendar.DATE, date);
-        setcalendar.set(Calendar.HOUR_OF_DAY, hour);
-        setcalendar.set(Calendar.MINUTE, min);
-        setcalendar.set(Calendar.SECOND, 0);
+            Calendar setcalendar = Calendar.getInstance();
+            SimpleDateFormat rfc3339 = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+            setcalendar.setTime(rfc3339.parse(date));
 
-        if(setcalendar.before(calendar))
-            setcalendar.add(Calendar.DATE,1);
+            if (setcalendar.before(calendar))
+                setcalendar.add(Calendar.DATE, 1);
 
-        // Enable a receiver
-        ComponentName receiver = new ComponentName(context, cls);
-        PackageManager pm = context.getPackageManager();
+            // Enable a receiver
+            ComponentName receiver = new ComponentName(context, cls);
+            PackageManager pm = context.getPackageManager();
 
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
+            pm.setComponentEnabledSetting(receiver,
+                    PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                    PackageManager.DONT_KILL_APP);
 
-        Intent intent1 = new Intent(context, cls);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, DAILY_REMINDER_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        am.set(AlarmManager.RTC, setcalendar.getTimeInMillis(), pendingIntent);
+            Intent intent1 = new Intent(context, cls);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, DAILY_REMINDER_REQUEST_CODE, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager am = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+            am.set(AlarmManager.RTC, setcalendar.getTimeInMillis(), pendingIntent);
+        } catch (Exception e) {
+        }
     }
 
 }
