@@ -118,7 +118,7 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
         Log.d("insertEventStart", startDate.toString());
         //DateTime startTime = calculateStartTime(task[4], dueDate);
         Event new1 = new Event().setSummary(task[0])
-                                .setLocation(task[1]);
+                .setLocation(task[1]);
         EventDateTime start = new EventDateTime()
                 .setDateTime(startDate)
                 .setTimeZone("America/Los_Angeles");
@@ -338,7 +338,7 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
 
     public void createEventAsync(final String summary, final String location, final String des,
                                  final EventDateTime startDate, final EventDateTime endDate, final List<EventAttendee>
-            eventAttendees) {
+                                         eventAttendees) {
 
         new AsyncTask<Void, Void, String>() {
             private com.google.api.services.calendar.Calendar mService = null;
@@ -373,7 +373,7 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
 
     public void createEventAsync(final String summary, final String location, final String des,
                                  final DateTime startDate, final DateTime endDate, final EventAttendee[]
-            eventAttendees) {
+                                         eventAttendees) {
 
         new AsyncTask<Void, Void, String>() {
             private com.google.api.services.calendar.Calendar mService = null;
