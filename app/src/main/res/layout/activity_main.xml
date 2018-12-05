@@ -162,7 +162,7 @@
                     android:id="@+id/timeText2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="02:00             Homework"
+                    android:text="04:40             Group Meeting"
                     android:textColor="#ffffff"
                     android:textSize="25sp"
                     tools:layout_editor_absoluteX="42dp"
@@ -180,13 +180,15 @@
                     android:layout_height="wrap_content"
                     android:text="08:45             Class"
                     android:textColor="#ffffff"
-                    android:textSize="25sp" />
+                    android:textSize="25sp"
+                    android:visibility="invisible" />
 
                 <View
                     android:id="@+id/line3"
                     android:layout_width="fill_parent"
                     android:layout_height="2dip"
-                    android:background="@color/colorHint"></View>
+                    android:background="@color/colorHint"
+                    android:visibility="invisible"></View>
 
                 <TextView
                     android:id="@+id/timeText4"
@@ -194,13 +196,15 @@
                     android:layout_height="wrap_content"
                     android:text="09:30             Gym"
                     android:textColor="#ffffff"
-                    android:textSize="25sp" />
+                    android:textSize="25sp"
+                    android:visibility="invisible" />
 
                 <View
                     android:id="@+id/line4"
                     android:layout_width="fill_parent"
                     android:layout_height="2dip"
-                    android:background="@color/colorHint"></View>
+                    android:background="@color/colorHint"
+                    android:visibility="invisible"></View>
 
                 <TextView
                     android:id="@+id/timeText5"
@@ -208,7 +212,8 @@
                     android:layout_height="wrap_content"
                     android:text="12:30             Read"
                     android:textColor="#ffffff"
-                    android:textSize="25sp" />
+                    android:textSize="25sp"
+                    android:visibility="invisible" />
             </LinearLayout>
         </ScrollView>
 
