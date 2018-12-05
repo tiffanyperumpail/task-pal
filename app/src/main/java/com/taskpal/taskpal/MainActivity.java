@@ -12,6 +12,11 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.content.ContentUris;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -44,6 +49,7 @@ import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
 
+import org.joda.time.DateMidnight;
 import org.w3c.dom.Text;
 
 import java.io.IOException;
@@ -77,6 +83,12 @@ public class MainActivity extends AppCompatActivity {
     private TextView timeText3;
     private TextView timeText4;
     private TextView timeText5;
+    private View line1;
+    private View line2;
+    private View line3;
+    private View line4;
+    private List<TextView> timeTexts;
+    private List<View> lines;
     private DrawerLayout drawerLayout;
     GoogleAccountCredential mCredential;
     private static final String[] SCOPES = { CALENDAR_EVENTS, CalendarScopes.CALENDAR};
@@ -100,7 +112,24 @@ public class MainActivity extends AppCompatActivity {
         timeText3 = findViewById(R.id.timeText3);
         timeText4 = findViewById(R.id.timeText4);
         timeText5 = findViewById(R.id.timeText5);
+        line1 = findViewById(R.id.line1);
+        line2 = findViewById(R.id.line2);
+        line3 = findViewById(R.id.line3);
+        line4 = findViewById(R.id.line4);
         drawerLayout = findViewById(R.id.drawer_layout);
+
+        timeTexts = new ArrayList<>();
+        timeTexts.add(timeText1);
+        timeTexts.add(timeText2);
+        timeTexts.add(timeText3);
+        timeTexts.add(timeText4);
+        timeTexts.add(timeText5);
+
+        lines = new ArrayList<>();
+        lines.add(line1);
+        lines.add(line2);
+        lines.add(line3);
+        lines.add(line4);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM");
         Date date = new Date();
@@ -130,8 +159,18 @@ public class MainActivity extends AppCompatActivity {
                                 startActivity(new Intent(MainActivity.this, PreferencesActivity.class));
                                 return true;
                             case R.id.nav_calendar:
-                                startActivity(new Intent(MainActivity.this, CalendarActivity.class));
+                                long startMillis2 = System.currentTimeMillis();
+                                Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+                                builder.appendPath("time");
+                                ContentUris.appendId(builder, startMillis2);
+                                Intent intent = new Intent(Intent.ACTION_VIEW)
+                                        .setData(builder.build());
+                                startActivity(intent);
                                 return true;
+                            /*case R.id.nav_tutorial:
+                                intent = new Intent(MainActivity.this, IntroActivity.class);
+                                intent.putExtra("flag", "A");
+                                startActivity(intent);*/
                             default:
                                 return true;
                         }
@@ -142,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
         addTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                notificationManager.notify(1, mBuilder.build());
+                //notificationManager.notify(1, mBuilder.build());
                 startActivity(new Intent(MainActivity.this, NewTaskActivity.class));
             }
         });
@@ -150,7 +189,13 @@ public class MainActivity extends AppCompatActivity {
         sunButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, CalendarActivity.class));
+                long startMillis2 = System.currentTimeMillis();
+                Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+                builder.appendPath("time");
+                ContentUris.appendId(builder, startMillis2);
+                Intent intent = new Intent(Intent.ACTION_VIEW)
+                        .setData(builder.build());
+                startActivity(intent);
             }
         });
 
@@ -209,14 +254,17 @@ public class MainActivity extends AppCompatActivity {
         if (! isGooglePlayServicesAvailable()) {
             acquireGooglePlayServices();
         } else if (mCredential.getSelectedAccountName() == null) {
-            chooseAccount();
+            try {
+                chooseAccount();
+            } catch (Exception e) {}
         } else if (! isDeviceOnline()) {
             //mOutputText.setText("No network connection available.");
             //ADD BEHAVIOR HERE
-        } else {
+        }
+        try {
             Log.d("Insert", "Sets up service");
             new MainActivity.MakeRequestTask(mCredential).execute();
-        }
+        } catch (Exception e) {}
     }
 
     private boolean isGooglePlayServicesAvailable() {
@@ -339,10 +387,12 @@ public class MainActivity extends AppCompatActivity {
     private void getDataFromApi() throws IOException {
         // List the next 10 events from the primary calendar.
         DateTime now = new DateTime(System.currentTimeMillis());
+        DateTime tfh = new DateTime(System.currentTimeMillis() + 86400000);
         List<String> eventStrings = new ArrayList<String>();
         Events events = service.events().list("primary")
                 .setMaxResults(5)
                 .setTimeMin(now)
+                .setTimeMax(tfh)
                 .setOrderBy("startTime")
                 .setSingleEvents(true)
                 .execute();
@@ -351,6 +401,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void populateList(List<Event> events) {
-
+        for (int i = 0; i < 5; i++) {
+            TextView text = timeTexts.get(i);
+            if (i < events.size()) {
+                //handle event
+                Event event = events.get(i);
+                String name = event.getSummary().substring(0, 20);
+                String start = event.getStart().getDateTime().toStringRfc3339().substring(11,16);
+                String txt = start + "   " + name;
+                text.setText(txt);
+            } else {
+                //display none
+                text.setVisibility(View.GONE);
+                if (i > 0) {
+                    View line = lines.get(i-1);
+                    line.setVisibility(View.GONE);
+                }
+            }
+        }
     }
 }

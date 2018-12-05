@@ -153,6 +153,7 @@
                     tools:layout_editor_absoluteY="407dp" />
 
                 <View
+                    android:id="@+id/line1"
                     android:layout_width="fill_parent"
                     android:layout_height="2dip"
                     android:background="@color/colorHint"></View>
@@ -168,6 +169,7 @@
                     tools:layout_editor_absoluteY="407dp" />
 
                 <View
+                    android:id="@+id/line2"
                     android:layout_width="fill_parent"
                     android:layout_height="2dip"
                     android:background="@color/colorHint"></View>
@@ -181,6 +183,7 @@
                     android:textSize="25sp" />
 
                 <View
+                    android:id="@+id/line3"
                     android:layout_width="fill_parent"
                     android:layout_height="2dip"
                     android:background="@color/colorHint"></View>
@@ -194,6 +197,7 @@
                     android:textSize="25sp" />
 
                 <View
+                    android:id="@+id/line4"
                     android:layout_width="fill_parent"
                     android:layout_height="2dip"
                     android:background="@color/colorHint"></View>
