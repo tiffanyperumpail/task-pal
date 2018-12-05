@@ -1,20 +1,22 @@
 package com.taskpal.taskpal;
 
+import android.annotation.TargetApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 
 import android.Manifest;
 import android.accounts.AccountManager;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.ContentUris;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -27,16 +29,6 @@ import android.os.AsyncTask;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Calendars;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.text.format.DateFormat;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 
 import com.google.android.gms.auth.UserRecoverableAuthException;
@@ -57,18 +49,25 @@ import com.google.api.services.calendar.model.EventAttendee;
 import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.services.calendar.model.EventReminder;
 import com.google.api.services.calendar.model.Events;
+import com.google.api.services.calendar.model.FreeBusyRequest;
+import com.google.api.services.calendar.model.FreeBusyRequestItem;
+import com.google.api.services.calendar.model.FreeBusyResponse;
+import com.google.api.services.calendar.model.TimePeriod;
 
 import java.io.IOException;
 import java.text.Format;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 import org.joda.time.format.DateTimeFormat;
+
+import static com.taskpal.taskpal.PreferencesActivity.MyPREFERENCES;
 
 public class CalendarActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
 
@@ -95,9 +94,212 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
         mCredential = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
-        getResultsFromApi();
+        checkDependencies();
         Bundle bundle = getIntent().getExtras();
-        calculateSchedule(bundle.getStringArray("curr"));
+        SharedPreferences shared = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+
+        calculateSchedule(bundle.getStringArray("curr"),
+                TimePreference.toTimePreference(shared.getString("TimePreference", TimePreference.MORNING.name())),
+                AttentionPreference.toAttentionPreference(shared.getString("AttentionPreference", AttentionPreference.NO_BREAKS.name())),
+                DeadlinePreference.toDeadlinePreference(shared.getString("DeadlinePreference", DeadlinePreference.CLOSER.name())));
+    }
+
+    void calculateSchedule(String[] task, TimePreference time, AttentionPreference attention,
+                           DeadlinePreference deadline) {
+        //List<Event> events = new ArrayList<>();
+        Event genericEvent = genericEvent(task);
+        int remaining = Integer.parseInt(task[2]);
+        Date start = startTime(task, deadline);
+        Calendar startCal = Calendar.getInstance();
+        startCal.setTime(start);
+        if (deadline == DeadlinePreference.LONGER) {
+            startCal.add(Calendar.DATE, 1);
+        }
+        while (remaining > 0) {
+            Date cur = startCal.getTime();
+            Calendar curCal = Calendar.getInstance();
+            curCal.setTime(cur);
+            if (AttentionPreference.BREAKS == attention) {
+                validEvent(genericEvent, time, Math.min(remaining, 120), curCal);
+                remaining -= 120;
+            } else {
+                validEvent(genericEvent, time, Math.min(remaining, 180), curCal);
+                remaining -= 180;
+            }
+            //events.add(currEvent);
+            startCal.add(Calendar.DATE, 1);
+            Log.d("DateIncrement", startCal.toString());
+        }
+    }
+
+    @TargetApi(26)
+    private Date startTime(String[] task, DeadlinePreference deadline) {
+        Date start;
+        int year = Integer.parseInt(task[7]);
+        int month = Integer.parseInt(task[6]);
+        int day = Integer.parseInt(task[5]);
+        if (deadline == DeadlinePreference.LONGER) {
+            start = new Date();
+        } else {
+            LocalDate dateMin = LocalDate.now();
+            LocalDate dateMax = LocalDate.of(year, month, day);
+            LocalDate median = dateMin.plusDays(ChronoUnit.DAYS.between(dateMin, dateMax) / 2);
+            start = Date.from(median.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        }
+        return start;
+    }
+
+    private void validEvent(Event task, TimePreference time, int remaining, Calendar cal) {
+        Log.d("DateIncrementAsync", cal.toString());
+        validEventAsync(task, time, remaining, cal);
+    }
+    /*
+    private Event validEvent(Event task, TimePreference time, int remaining, Calendar cal) {
+        FreeBusyRequest fbr = new FreeBusyRequest();
+        FreeBusyRequestItem calendar = new FreeBusyRequestItem();
+        calendar.setId("primary");
+        fbr.setItems(new ArrayList<FreeBusyRequestItem>());
+        fbr.getItems().add(calendar);
+        List<Calendar> preferredTimes = preferredTime(cal, time);
+        fbr.setTimeMin(new DateTime(preferredTimes.get(0).getTime()));
+        fbr.setTimeMax(new DateTime(preferredTimes.get(1).getTime()));
+        try {
+            com.google.api.services.calendar.Calendar.Freebusy.Query query = service.freebusy().query(fbr);
+            FreeBusyResponse response = query.execute();
+            List<TimePeriod> busyIntervals = response.getCalendars().get("primary").getBusy();
+            List<Calendar> freeTimes = freeTimes(busyIntervals, time, cal, remaining);
+            task.setStart(new EventDateTime()
+                    .setDateTime(new DateTime(freeTimes.get(0).getTime()))
+                    .setTimeZone("America/Los_Angeles"));
+            task.setEnd(new EventDateTime()
+                    .setDateTime(new DateTime(freeTimes.get(1).getTime()))
+                    .setTimeZone("America/Los_Angeles"));
+        }
+        catch (IOException e) {
+            Log.d("FreeBusy", "Failed request.");
+        }
+        return task;
+    }*/
+
+
+
+    private List<DateTime> preferredTime(Calendar cal, TimePreference time) {
+        Log.d("FinalTask2", cal.toString());
+        List<DateTime> preferredTimes = new ArrayList<>();
+        Date current = cal.getTime();
+        DateTime start;
+        DateTime end;
+        if (time == TimePreference.DAY) {
+            cal.set(Calendar.HOUR_OF_DAY, 11);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            start = new DateTime(cal.getTime());
+            cal.add(Calendar.HOUR_OF_DAY, 6);
+            end = new DateTime(cal.getTime());
+        }
+        else if (time == TimePreference.MORNING) {
+            cal.set(Calendar.HOUR_OF_DAY, 8);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            start = new DateTime(cal.getTime());
+            cal.add(Calendar.HOUR_OF_DAY, 4);
+            end = new DateTime(cal.getTime());
+        } else {
+            cal.set(Calendar.HOUR_OF_DAY, 17);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            start = new DateTime(cal.getTime());
+            cal.add(Calendar.HOUR_OF_DAY, 5);
+            cal.add(Calendar.DATE, 1);
+            end = new DateTime(cal.getTime());
+        }
+        cal.setTime(current);
+        preferredTimes.add(start);
+        preferredTimes.add(end);
+        Log.d("FinalTask", start.toString());
+        Log.d("FinalTask", end.toString());
+        return preferredTimes;
+    }
+
+    private List<DateTime> freeTimes(List<TimePeriod> intervals, TimePreference time, Calendar cal, int remaining) {
+        List<DateTime> freeTimes = new ArrayList<>();
+        Date current = cal.getTime();
+        DateTime start;
+        DateTime end;
+        if (intervals.isEmpty()) {
+            if (time == TimePreference.DAY) {
+                start = freeEntry(cal, 11, 0);
+                end = freeEntry(cal, 11 + (remaining / 60), remaining % 60);
+            }
+            else if (time == TimePreference.MORNING) {
+                start = freeEntry(cal, 8, 0);
+                end = freeEntry(cal, 8 + (remaining / 60), remaining % 60);
+            }
+            else {
+                start = freeEntry(cal, 17, 0);
+                end = freeEntry(cal, 17 + (remaining / 60), remaining % 60);
+            }
+        } else {
+            Calendar endTime = Calendar.getInstance();
+            endTime.setTimeInMillis(intervals.get(intervals.size() - 1).getEnd().getValue());
+            start = intervals.get(intervals.size() - 1).getEnd();
+            end = freeEntry(endTime, endTime.get(Calendar.HOUR_OF_DAY) + (remaining / 60),
+                    endTime.get(Calendar.MINUTE) + remaining % 60);
+        }
+        cal.setTime(current);
+        freeTimes.add(start);
+        freeTimes.add(end);
+        return freeTimes;
+    }
+
+    private DateTime freeEntry(Calendar cal, int hour, int minutes) {
+        Date current = cal.getTime();
+        DateTime value;
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.HOUR_OF_DAY, hour);
+        cal.set(Calendar.MINUTE, minutes);
+        value = new DateTime(cal.getTime());
+        cal.setTime(current);
+        return value;
+    }
+
+    /**
+     * Returns a generic event with a input of NewTask variables.
+     */
+    public Event genericEvent(String[] task) {
+        Calendar cal = Calendar.getInstance();
+        Log.d("input", task.toString());
+        cal.set(Integer.parseInt(task[7]), Integer.parseInt(task[6]), Integer.parseInt(task[5]),
+                Integer.parseInt(task[8]), Integer.parseInt(task[9]));
+        cal.add(Calendar.MONTH, -1);
+        DateTime dueDate = new DateTime(cal.getTime());
+        Log.d("insertEventHour", task[8]);
+        Log.d("insertEventEnd", dueDate.toString());
+        cal.add(Calendar.HOUR, -2);
+        DateTime startDate = new DateTime(cal.getTime());
+        Log.d("insertEventStart", startDate.toString());
+        //DateTime startTime = calculateStartTime(task[4], dueDate);
+        Event genericEvent = new Event().setSummary(task[0])
+                .setLocation(task[1]);
+        EventDateTime start = new EventDateTime()
+                .setDateTime(startDate)
+                .setTimeZone("America/Los_Angeles");
+        genericEvent.setStart(start);
+        EventDateTime end = new EventDateTime()
+                .setDateTime(dueDate)
+                .setTimeZone("America/Los_Angeles");
+        genericEvent.setEnd(end);
+        String[] recurrence = new String[]{"RRULE:FREQ=DAILY;COUNT=1"};
+        genericEvent.setRecurrence(Arrays.asList(recurrence));
+        EventReminder[] reminderOverrides = new EventReminder[]{
+                new EventReminder().setMethod("email").setMinutes(24 * 60),
+                new EventReminder().setMethod("popup").setMinutes(Integer.parseInt(task[4])),
+        };
+        Event.Reminders reminders = new Event.Reminders()
+                .setUseDefault(false)
+                .setOverrides(Arrays.asList(reminderOverrides));
+        genericEvent.setReminders(reminders);
+        return genericEvent;
     }
 
     /**
@@ -200,12 +402,12 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
         }
     }
 
-    private void getResultsFromApi() {
+    private void checkDependencies() {
         if (! isGooglePlayServicesAvailable()) {
             acquireGooglePlayServices();
         } else if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
-        } else if (! isDeviceOnline()) {
+        } else if (!isDeviceOnline()) {
             mOutputText.setText("No network connection available.");
         } else {
             Log.d("Insert", "Sets up service");
@@ -251,7 +453,7 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
             if (accountName != null) {
                 Log.d("Insert", "HasName");
                 mCredential.setSelectedAccountName(accountName);
-                getResultsFromApi();
+                checkDependencies();
             } else {
                 // Start a dialog from which the user can choose an account
                 Log.d("Insert", "NoName");
@@ -309,7 +511,7 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
                             "This app requires Google Play Services. Please install " +
                                     "Google Play Services on your device and relaunch this app.");
                 } else {
-                    getResultsFromApi();
+                    checkDependencies();
                 }
                 break;
             case REQUEST_ACCOUNT_PICKER:
@@ -324,16 +526,62 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
                         editor.putString(PREF_ACCOUNT_NAME, accountName);
                         editor.apply();
                         mCredential.setSelectedAccountName(accountName);
-                        getResultsFromApi();
+                        checkDependencies();
                     }
                 }
                 break;
             case REQUEST_AUTHORIZATION:
                 if (resultCode == RESULT_OK) {
-                    getResultsFromApi();
+                    checkDependencies();
                 }
                 break;
         }
+    }
+
+
+    public void validEventAsync(final Event task, final TimePreference time, final int remaining, final Calendar cal) {
+        Log.d("DateIncrementval", cal.toString());
+
+        new AsyncTask<Void, Void, FreeBusyResponse>() {
+
+            @Override
+            protected FreeBusyResponse doInBackground (Void...voids){
+                try {
+
+                    FreeBusyRequest fbr = new FreeBusyRequest();
+                    FreeBusyRequestItem calendar = new FreeBusyRequestItem();
+                    calendar.setId("primary");
+                    fbr.setItems(new ArrayList<FreeBusyRequestItem>());
+                    fbr.getItems().add(calendar);
+                    List<DateTime> preferredTimes = preferredTime(cal, time);
+                    fbr.setTimeMin(preferredTimes.get(0));
+                    fbr.setTimeMax(preferredTimes.get(1));
+                    Log.d("DateIncrementfbr", fbr.getTimeMin().toString());
+                    Log.d("DateIncrementfbr", fbr.getTimeMax().toString());
+                    com.google.api.services.calendar.Calendar.Freebusy.Query query = service.freebusy().query(fbr);
+                    return query.execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute (FreeBusyResponse response){
+                List<TimePeriod> busyIntervals = response.getCalendars().get("primary").getBusy();
+                List<DateTime> freeTimes = freeTimes(busyIntervals, time, cal, remaining);
+                Log.d("DateIncrementPst", freeTimes.get(0).toString());
+                Log.d("DateIncrementPst", freeTimes.get(1).toString());
+                task.setStart(new EventDateTime()
+                        .setDateTime(freeTimes.get(0))
+                        .setTimeZone("America/Los_Angeles"));
+                task.setEnd(new EventDateTime()
+                        .setDateTime(freeTimes.get(1))
+                        .setTimeZone("America/Los_Angeles"));
+                createEventAsync(task.getSummary(), task.getLocation(), task.getDescription(),
+                        task.getStart(), task.getEnd(), task.getAttendees());
+            }
+        }.execute();
     }
 
     public void createEventAsync(final String summary, final String location, final String des,
@@ -341,10 +589,6 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
                                          eventAttendees) {
 
         new AsyncTask<Void, Void, String>() {
-            private com.google.api.services.calendar.Calendar mService = null;
-            private Exception mLastError = null;
-            private boolean FLAG = false;
-
 
             @Override
             protected String doInBackground (Void...voids){
@@ -359,7 +603,7 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
             @Override
             protected void onPostExecute (String s){
                 super.onPostExecute(s);
-                getResultsFromApi();
+                checkDependencies();
                 long startMillis2 = System.currentTimeMillis();
                 Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
                 builder.appendPath("time");
@@ -376,10 +620,6 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
                                          eventAttendees) {
 
         new AsyncTask<Void, Void, String>() {
-            private com.google.api.services.calendar.Calendar mService = null;
-            private Exception mLastError = null;
-            private boolean FLAG = false;
-
 
             @Override
             protected String doInBackground (Void...voids){
@@ -394,7 +634,7 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
             @Override
             protected void onPostExecute (String s){
                 super.onPostExecute(s);
-                getResultsFromApi();
+                checkDependencies();
             }
         }.execute();
     }
@@ -425,7 +665,6 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
         event.setReminders(reminders);
         String calendarId = "primary";
         Log.d("Insert", "Before execution");
-        //event.send
         if (service != null) {
             try {
                 Log.d("Insert", "After Execution");
@@ -488,6 +727,7 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
         // List the next 10 events from the primary calendar.
         DateTime now = new DateTime(System.currentTimeMillis());
         List<String> eventStrings = new ArrayList<String>();
+
         Events events = service.events().list("primary")
                 .setMaxResults(10)
                 .setTimeMin(now)
@@ -495,7 +735,6 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
                 .setSingleEvents(true)
                 .execute();
         List<Event> items = events.getItems();
-        Event scheduledEvent;
         scheduledEventsList.clear();
         for (Event event : items) {
             scheduledEventsList.add(event);

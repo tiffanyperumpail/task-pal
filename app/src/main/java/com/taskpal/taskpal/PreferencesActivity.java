@@ -33,6 +33,10 @@ public class PreferencesActivity extends AppCompatActivity {
         // Name
         nameText = findViewById(R.id.nameTextPreferences);
 
+        final RadioGroup timeOfDay = (RadioGroup) findViewById(R.id.timeOfDayGroup);
+        final RadioGroup attentionSpanGroup = (RadioGroup) findViewById(R.id.attentionSpanGroup);
+        final RadioGroup procrastinationGroup = (RadioGroup) findViewById(R.id.procrastinationGroup);
+
         saveButton = findViewById(R.id.saveButton);
         exitButton = findViewById(R.id.exitButtonPreferences);
 
@@ -46,6 +50,11 @@ public class PreferencesActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 NAMETEXT = nameText.getText().toString();
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString("TimePreference", timeOfDayChecked(timeOfDay).name());
+                editor.putString("AttentionPreference", attentionSpanChecked(attentionSpanGroup).name());
+                editor.putString("DeadlinePreference", procrastinationGroup(procrastinationGroup).name());
+                editor.commit();
                 startActivity(new Intent(PreferencesActivity.this, MainActivity.class));
             }
         });
@@ -57,5 +66,43 @@ public class PreferencesActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private TimePreference timeOfDayChecked(RadioGroup timeOfDay) {
+        TimePreference preference = TimePreference.DAY;
+        int radioButtonId = timeOfDay.getCheckedRadioButtonId();
+        switch (radioButtonId) {
+            case R.id.morningButton:
+                preference = TimePreference.MORNING;
+            case R.id.dayButton:
+                preference = TimePreference.DAY;
+            case R.id.nightButton:
+                preference = TimePreference.NIGHT;
+        }
+        return preference;
+    }
+
+    private AttentionPreference attentionSpanChecked(RadioGroup attention) {
+        AttentionPreference preference = AttentionPreference.BREAKS;
+        int radioButtonId = attention.getCheckedRadioButtonId();
+        switch (radioButtonId) {
+            case R.id.all_at_onceButton:
+                preference = AttentionPreference.NO_BREAKS;
+            case R.id.breaksButton:
+                preference = AttentionPreference.BREAKS;
+        }
+        return preference;
+    }
+
+    private DeadlinePreference procrastinationGroup(RadioGroup procrastination) {
+        DeadlinePreference preference = DeadlinePreference.CLOSER;
+        int radioButtonId = procrastination.getCheckedRadioButtonId();
+        switch (radioButtonId) {
+            case R.id.closerButton:
+                preference = DeadlinePreference.CLOSER;
+            case R.id.beforeButton:
+                preference = DeadlinePreference.LONGER;
+        }
+        return preference;
     }
 }
