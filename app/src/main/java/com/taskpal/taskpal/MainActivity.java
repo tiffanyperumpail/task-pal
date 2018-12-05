@@ -425,10 +425,15 @@ public class MainActivity extends AppCompatActivity {
                 text.setText(txt);
             } else {
                 //display none
-                text.setVisibility(View.GONE);
-                if (i > 0) {
-                    View line = lines.get(i - 1);
-                    line.setVisibility(View.GONE);
+                if (i == 0) {
+                    String error = "No events to display!";
+                    text.setText(error);
+                } else {
+                    text.setVisibility(View.GONE);
+                    if (i > 0) {
+                        View line = lines.get(i - 1);
+                        line.setVisibility(View.GONE);
+                    }
                 }
             }
         }
