@@ -358,6 +358,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 getDataFromApi();
             } catch (Exception e) {
+                populateList(new ArrayList<Event>());
                 e.printStackTrace();
                 mLastError = e;
                 cancel(true);
@@ -415,7 +416,10 @@ public class MainActivity extends AppCompatActivity {
             if (i < events.size()) {
                 //handle event
                 Event event = events.get(i);
-                String name = event.getSummary().substring(0, 20);
+                String name = event.getSummary();
+                if (name.length() > 12) {
+                    name = name.substring(0, 11) + "...";
+                }
                 String start = event.getStart().getDateTime().toStringRfc3339().substring(11,16);
                 String txt = start + "   " + name;
                 text.setText(txt);
@@ -423,7 +427,7 @@ public class MainActivity extends AppCompatActivity {
                 //display none
                 text.setVisibility(View.GONE);
                 if (i > 0) {
-                    View line = lines.get(i-1);
+                    View line = lines.get(i - 1);
                     line.setVisibility(View.GONE);
                 }
             }
