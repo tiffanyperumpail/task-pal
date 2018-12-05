@@ -3,6 +3,7 @@ package com.taskpal.taskpal;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -74,10 +75,13 @@ public class PreferencesActivity extends AppCompatActivity {
         switch (radioButtonId) {
             case R.id.morningButton:
                 preference = TimePreference.MORNING;
+                break;
             case R.id.dayButton:
                 preference = TimePreference.DAY;
+                break;
             case R.id.nightButton:
                 preference = TimePreference.NIGHT;
+                break;
         }
         return preference;
     }
@@ -88,8 +92,10 @@ public class PreferencesActivity extends AppCompatActivity {
         switch (radioButtonId) {
             case R.id.all_at_onceButton:
                 preference = AttentionPreference.NO_BREAKS;
+                break;
             case R.id.breaksButton:
                 preference = AttentionPreference.BREAKS;
+                break;
         }
         return preference;
     }
@@ -100,8 +106,10 @@ public class PreferencesActivity extends AppCompatActivity {
         switch (radioButtonId) {
             case R.id.closerButton:
                 preference = DeadlinePreference.CLOSER;
+                break;
             case R.id.beforeButton:
                 preference = DeadlinePreference.LONGER;
+                break;
         }
         return preference;
     }

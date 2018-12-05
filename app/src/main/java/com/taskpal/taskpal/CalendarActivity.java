@@ -127,7 +127,7 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
                 remaining -= 180;
             }
             //events.add(currEvent);
-            startCal.add(Calendar.DATE, 1);
+            startCal.add(Calendar.DATE, 2);
             Log.d("DateIncrement", startCal.toString());
         }
     }
