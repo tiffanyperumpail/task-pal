@@ -15,6 +15,9 @@ import android.os.AsyncTask;
 import android.content.ContentUris;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.ContentUris;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
@@ -167,10 +170,10 @@ public class MainActivity extends AppCompatActivity {
                                         .setData(builder.build());
                                 startActivity(intent);
                                 return true;
-                            /*case R.id.nav_tutorial:
+                            case R.id.nav_tutorial:
                                 intent = new Intent(MainActivity.this, IntroActivity.class);
                                 intent.putExtra("flag", "A");
-                                startActivity(intent);*/
+                                startActivity(intent);
                             default:
                                 return true;
                         }
@@ -206,9 +209,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //initiates google login
         mCredential = GoogleAccountCredential.usingOAuth2(
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
+
+        //gets next five tasks within a 24 hour period
         getResultsFromApi();
     }
 
@@ -259,12 +265,15 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {}
         } else if (! isDeviceOnline()) {
             //mOutputText.setText("No network connection available.");
-            //ADD BEHAVIOR HERE
         }
         try {
             Log.d("Insert", "Sets up service");
+            //this will try to retrieve the next 5 events. it calls getDataFromAPI at the end
             new MainActivity.MakeRequestTask(mCredential).execute();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+            //if anything fails, hide the Up Next section
+            populateList(new ArrayList<Event>());
+        }
     }
 
     private boolean isGooglePlayServicesAvailable() {
@@ -380,7 +389,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Fetch a list of the next 5 events from the primary calendar.
+     * Fetch a list of the next 5 events from the primary calendar, within 24 hours of the current time.
      * @return List of Strings describing returned events.
      * @throws IOException
      */
