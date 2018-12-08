@@ -128,7 +128,6 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
             }
             //events.add(currEvent);
             startCal.add(Calendar.DATE, 2);
-            Log.d("DateIncrement", startCal.toString());
         }
     }
 
@@ -150,41 +149,10 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
     }
 
     private void validEvent(Event task, TimePreference time, int remaining, Calendar cal) {
-        Log.d("DateIncrementAsync", cal.toString());
         validEventAsync(task, time, remaining, cal);
     }
-    /*
-    private Event validEvent(Event task, TimePreference time, int remaining, Calendar cal) {
-        FreeBusyRequest fbr = new FreeBusyRequest();
-        FreeBusyRequestItem calendar = new FreeBusyRequestItem();
-        calendar.setId("primary");
-        fbr.setItems(new ArrayList<FreeBusyRequestItem>());
-        fbr.getItems().add(calendar);
-        List<Calendar> preferredTimes = preferredTime(cal, time);
-        fbr.setTimeMin(new DateTime(preferredTimes.get(0).getTime()));
-        fbr.setTimeMax(new DateTime(preferredTimes.get(1).getTime()));
-        try {
-            com.google.api.services.calendar.Calendar.Freebusy.Query query = service.freebusy().query(fbr);
-            FreeBusyResponse response = query.execute();
-            List<TimePeriod> busyIntervals = response.getCalendars().get("primary").getBusy();
-            List<Calendar> freeTimes = freeTimes(busyIntervals, time, cal, remaining);
-            task.setStart(new EventDateTime()
-                    .setDateTime(new DateTime(freeTimes.get(0).getTime()))
-                    .setTimeZone("America/Los_Angeles"));
-            task.setEnd(new EventDateTime()
-                    .setDateTime(new DateTime(freeTimes.get(1).getTime()))
-                    .setTimeZone("America/Los_Angeles"));
-        }
-        catch (IOException e) {
-            Log.d("FreeBusy", "Failed request.");
-        }
-        return task;
-    }*/
-
-
 
     private List<DateTime> preferredTime(Calendar cal, TimePreference time) {
-        Log.d("FinalTask2", cal.toString());
         List<DateTime> preferredTimes = new ArrayList<>();
         Date current = cal.getTime();
         DateTime start;
@@ -216,8 +184,6 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
         cal.setTime(current);
         preferredTimes.add(start);
         preferredTimes.add(end);
-        Log.d("FinalTask", start.toString());
-        Log.d("FinalTask", end.toString());
         return preferredTimes;
     }
 
@@ -268,17 +234,12 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
      */
     public Event genericEvent(String[] task) {
         Calendar cal = Calendar.getInstance();
-        Log.d("input", task.toString());
         cal.set(Integer.parseInt(task[7]), Integer.parseInt(task[6]), Integer.parseInt(task[5]),
                 Integer.parseInt(task[8]), Integer.parseInt(task[9]));
         cal.add(Calendar.MONTH, -1);
         DateTime dueDate = new DateTime(cal.getTime());
-        Log.d("insertEventHour", task[8]);
-        Log.d("insertEventEnd", dueDate.toString());
         cal.add(Calendar.HOUR, -2);
         DateTime startDate = new DateTime(cal.getTime());
-        Log.d("insertEventStart", startDate.toString());
-        //DateTime startTime = calculateStartTime(task[4], dueDate);
         Event genericEvent = new Event().setSummary(task[0])
                 .setLocation(task[1]);
         EventDateTime start = new EventDateTime()
@@ -308,17 +269,12 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
     void calculateSchedule(String[] task) {
         List<Event> events = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
-        Log.d("input", task.toString());
         cal.set(Integer.parseInt(task[7]), Integer.parseInt(task[6]), Integer.parseInt(task[5]),
                 Integer.parseInt(task[8]), Integer.parseInt(task[9]));
         cal.add(Calendar.MONTH, -1);
         DateTime dueDate = new DateTime(cal.getTime());
-        Log.d("insertEventHour", task[8]);
-        Log.d("insertEventEnd", dueDate.toString());
         cal.add(Calendar.HOUR, -2);
         DateTime startDate = new DateTime(cal.getTime());
-        Log.d("insertEventStart", startDate.toString());
-        //DateTime startTime = calculateStartTime(task[4], dueDate);
         Event new1 = new Event().setSummary(task[0])
                 .setLocation(task[1]);
         EventDateTime start = new EventDateTime()
@@ -339,8 +295,6 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
                 .setUseDefault(false)
                 .setOverrides(Arrays.asList(reminderOverrides));
         new1.setReminders(reminders);
-        Log.d("event", new1.getStart().toString());
-        Log.d("event", new1.getEnd().toString());
         events.add(new1);
         for (Event event : events) {
             createEventAsync(event.getSummary(), event.getLocation(), event.getDescription(),
@@ -370,7 +324,6 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
         protected List<String> doInBackground(Void... params) {
             try {
                 getDataFromApi();
-                Log.d("GetDataFromAPI", "True");
             } catch (Exception e) {
                 e.printStackTrace();
                 mLastError = e;
@@ -389,7 +342,6 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
                             ((GooglePlayServicesAvailabilityIOException) mLastError)
                                     .getConnectionStatusCode());
                 } else if (mLastError instanceof UserRecoverableAuthIOException) {
-                    Log.d("Auth", "AuthIO");
                     startActivityForResult(
                             ((UserRecoverableAuthIOException) mLastError).getIntent(),
                             CalendarActivity.REQUEST_AUTHORIZATION);
@@ -411,7 +363,6 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
         } else if (!isDeviceOnline()) {
             mOutputText.setText("No network connection available.");
         } else {
-            Log.d("Insert", "Sets up service");
             new MakeRequestTask(mCredential).execute();
         }
     }
@@ -448,23 +399,19 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
     private void chooseAccount() {
         if (EasyPermissions.hasPermissions(
                 this, Manifest.permission.GET_ACCOUNTS)) {
-            Log.d("Insert", "HasPermissions");
             String accountName = getPreferences(Context.MODE_PRIVATE)
                     .getString(PREF_ACCOUNT_NAME, null);
             if (accountName != null) {
-                Log.d("Insert", "HasName");
                 mCredential.setSelectedAccountName(accountName);
                 checkDependencies();
             } else {
                 // Start a dialog from which the user can choose an account
-                Log.d("Insert", "NoName");
                 startActivityForResult(
                         mCredential.newChooseAccountIntent(),
                         REQUEST_ACCOUNT_PICKER);
             }
         } else {
             // Request the GET_ACCOUNTS permission via a user dialog
-            Log.d("Insert", "RequestPermissions");
             EasyPermissions.requestPermissions(
                     this,
                     "This app needs to access your Google account (via Contacts).",
@@ -541,7 +488,6 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
 
 
     public void validEventAsync(final Event task, final TimePreference time, final int remaining, final Calendar cal) {
-        Log.d("DateIncrementval", cal.toString());
 
         new AsyncTask<Void, Void, FreeBusyResponse>() {
 
@@ -557,8 +503,6 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
                     List<DateTime> preferredTimes = preferredTime(cal, time);
                     fbr.setTimeMin(preferredTimes.get(0));
                     fbr.setTimeMax(preferredTimes.get(1));
-                    Log.d("DateIncrementfbr", fbr.getTimeMin().toString());
-                    Log.d("DateIncrementfbr", fbr.getTimeMax().toString());
                     com.google.api.services.calendar.Calendar.Freebusy.Query query = service.freebusy().query(fbr);
                     return query.execute();
                 } catch (IOException e) {
@@ -571,8 +515,6 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
             protected void onPostExecute (FreeBusyResponse response){
                 List<TimePeriod> busyIntervals = response.getCalendars().get("primary").getBusy();
                 List<DateTime> freeTimes = freeTimes(busyIntervals, time, cal, remaining);
-                Log.d("DateIncrementPst", freeTimes.get(0).toString());
-                Log.d("DateIncrementPst", freeTimes.get(1).toString());
                 task.setStart(new EventDateTime()
                         .setDateTime(freeTimes.get(0))
                         .setTimeZone("America/Los_Angeles"));
@@ -626,9 +568,7 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
                 .setLocation(location)
                 .setDescription(des);
         event.setStart(startDate);
-        Log.d("insertStart", startDate.toString());
         event.setEnd(endDate);
-        Log.d("insertEnd", endDate.toString());
         String[] recurrence = new String[]{"RRULE:FREQ=DAILY;COUNT=1"};
         event.setRecurrence(Arrays.asList(recurrence));
         event.setAttendees(eventAttendees);
@@ -641,10 +581,8 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
                 .setOverrides(Arrays.asList(reminderOverrides));
         event.setReminders(reminders);
         String calendarId = "primary";
-        Log.d("Insert", "Before execution");
         if (service != null) {
             try {
-                Log.d("Insert", "After Execution");
                 service.events().insert(calendarId, event).setSendNotifications(true).execute();
                 System.out.printf("Event created: %s\n", event.getHtmlLink());
             } catch (UserRecoverableAuthIOException e) {
@@ -682,11 +620,9 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
                 .setOverrides(Arrays.asList(reminderOverrides));
         event.setReminders(reminders);
         String calendarId = "primary";
-        Log.d("Insert", "Before execution");
         //event.send
         if (service != null) {
             try {
-                Log.d("Insert", "After Execution");
                 service.events().insert(calendarId, event).setSendNotifications(true).execute();
                 System.out.printf("Event created: %s\n", event.getHtmlLink());
             } catch (UserRecoverableAuthIOException e) {

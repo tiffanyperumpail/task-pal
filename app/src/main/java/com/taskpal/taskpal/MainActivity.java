@@ -271,23 +271,12 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         } else if (! isDeviceOnline()) {
             //mOutputText.setText("No network connection available.");
         } else {
-            Log.d("gotData", "True4");
             try {
-                Log.d("Insert", "Sets up service2");
                 new MakeRequestTask(mCredential).execute();
             } catch (Exception e) {
                 populateList(new ArrayList<Event>());
             }
         }
-        /*
-        try {
-            Log.d("Insert", "Sets up service2");
-            //this will try to retrieve the next 5 events. it calls getDataFromAPI at the end
-            new MakeRequestTask(mCredential).execute();
-        } catch (Exception e) {
-            //if anything fails, hide the Up Next section
-            populateList(new ArrayList<Event>());
-        }*/
     }
 
     private boolean isGooglePlayServicesAvailable() {
@@ -322,23 +311,19 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
     private void chooseAccount() {
         if (EasyPermissions.hasPermissions(
                 this, Manifest.permission.GET_ACCOUNTS)) {
-            Log.d("Insert", "HasPermissions");
             String accountName = getPreferences(Context.MODE_PRIVATE)
                     .getString(PREF_ACCOUNT_NAME, null);
             if (accountName != null) {
-                Log.d("Insert", "HasName");
                 mCredential.setSelectedAccountName(accountName);
                 checkDependencies();
             } else {
                 // Start a dialog from which the user can choose an account
-                Log.d("Insert", "NoName");
                 startActivityForResult(
                         mCredential.newChooseAccountIntent(),
                         REQUEST_ACCOUNT_PICKER);
             }
         } else {
             // Request the GET_ACCOUNTS permission via a user dialog
-            Log.d("Insert", "RequestPermissions");
             EasyPermissions.requestPermissions(
                     this,
                     "This app needs to access your Google account (via Contacts).",
@@ -389,7 +374,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         @Override
         protected List<Event> doInBackground(Void... params) {
             try {
-                getDataFromApi();
+                return null;
             } catch (Exception e) {
                 populateList(new ArrayList<Event>());
                 e.printStackTrace();
@@ -397,34 +382,9 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                 cancel(true);
                 return null;
             }
-            return null;
         }
 
-        @Override
-        protected void onCancelled() {
-            //mProgress.hide();
-            if (mLastError != null) {
-                if (mLastError instanceof GooglePlayServicesAvailabilityIOException) {
-                    showGooglePlayServicesAvailabilityErrorDialog(
-                            ((GooglePlayServicesAvailabilityIOException) mLastError)
-                                    .getConnectionStatusCode());
-                } else if (mLastError instanceof UserRecoverableAuthIOException) {
-                    Log.d("Auth", "AuthIO");
-                    startActivityForResult(
-                            ((UserRecoverableAuthIOException) mLastError).getIntent(),
-                            CalendarActivity.REQUEST_AUTHORIZATION);
-                } else {
-                    //mOutputText.setText("The following error occurred:\n" + mLastError.getMessage());
-                }
-            } else {
-                //mOutputText.setText("Request cancelled.");
-            }
-        }
 
-        @Override
-        protected void onPostExecute(List<Event> items) {
-            populateList(items);
-        }
     }
 
     /**
@@ -437,9 +397,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
         DateTime now = new DateTime(System.currentTimeMillis());
         DateTime tfh = new DateTime(System.currentTimeMillis() + 86400000);
         List<Event> items = new ArrayList<>();
-        Log.d("gotData", "True1");
         if (service != null) {
-            Log.d("gotData", "True2");
             try {
                 Events events = service.events().list("primary")
                         .setMaxResults(5)
@@ -449,9 +407,7 @@ public class MainActivity extends AppCompatActivity implements EasyPermissions.P
                         .setSingleEvents(true)
                         .execute();
                 items = events.getItems();
-                Log.d("gotData", "TrueEnd");
             } catch (UserRecoverableAuthIOException e) {
-                Log.d("gotData", "True3");
                 startActivityForResult(e.getIntent(), CalendarActivity.REQUEST_AUTHORIZATION);
             }
         }
