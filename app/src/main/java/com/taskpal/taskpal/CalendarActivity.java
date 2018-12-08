@@ -370,6 +370,7 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
         protected List<String> doInBackground(Void... params) {
             try {
                 getDataFromApi();
+                Log.d("GetDataFromAPI", "True");
             } catch (Exception e) {
                 e.printStackTrace();
                 mLastError = e;
@@ -611,30 +612,6 @@ public class CalendarActivity extends AppCompatActivity implements EasyPermissio
                 Intent intent = new Intent(Intent.ACTION_VIEW)
                         .setData(builder.build());
                 startActivity(intent);
-            }
-        }.execute();
-    }
-
-    public void createEventAsync(final String summary, final String location, final String des,
-                                 final DateTime startDate, final DateTime endDate, final EventAttendee[]
-                                         eventAttendees) {
-
-        new AsyncTask<Void, Void, String>() {
-
-            @Override
-            protected String doInBackground (Void...voids){
-                try {
-                    insertEvent(summary, location, des, startDate, endDate, eventAttendees);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute (String s){
-                super.onPostExecute(s);
-                checkDependencies();
             }
         }.execute();
     }
